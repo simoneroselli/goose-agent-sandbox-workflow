@@ -22,22 +22,25 @@ The central question is how to balance two kinds of control:
 
 The goal is defense in depth. Container isolation limits the impact of a misbehaving agent, while Goose configuration limits the actions the agent is allowed to request. Neither layer should be treated as a complete security boundary on its own.
 
-## Configuration
+## Getting Started
 
-Each Goose project should contain an `agent-config.yaml` file at its project root. Start with the template:
+Install Colima with Homebrew and start it with Docker runtime networking enabled:
+
+```bash
+brew install colima
+colima start --runtime docker --network --network-address
+```
+
+ Put an `agent-config.yaml` file in a project workdir. Copy the template over and customize it:
 
 ```bash
 cp templates/agent-config.yaml.template /path/to/your-project/agent-config.yaml
 ```
 
-Review the provider, model, endpoint, approval mode, and enabled extensions before launching an agent. Keep manual approval enabled while evaluating agent behavior.
+Review the provider, model, endpoint, approval mode (approval), and enabled extensions before launching an agent.
 
-## Usage
-
-From this repository, pass exactly one project directory to the launcher:
+Launch the agent with the project workdir:
 
 ```bash
 python3 run-agent.py /path/to/your-project
 ```
-
-The project directory must contain `agent-config.yaml`. The launcher builds the image if necessary and then starts an interactive Goose session inside the container.
