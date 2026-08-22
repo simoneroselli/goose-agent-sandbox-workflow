@@ -1,3 +1,4 @@
+# Put this file inside the workload project dir.
 project_name: <your_project_name_here>
 provider: openai
 model: qwen3.8-27b
