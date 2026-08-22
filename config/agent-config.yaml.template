@@ -1,0 +1,6 @@
+project_name: <your_project_name_here>
+provider: openai
+model: qwen3.8-27b
+host: <your_api_url_here>
+# Enforce safe approval mode so it can't execute changes blindly
+mode: approve
