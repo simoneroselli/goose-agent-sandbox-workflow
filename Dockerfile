@@ -12,21 +12,21 @@ RUN apt-get update && apt-get install -y \
 ARG USER_ID=1000
 ARG GROUP_ID=1000
 
-RUN groupadd -g ${GROUP_ID} -o agentgroup && \
-    useradd -l -u ${USER_ID} -g agentgroup -o -m -s /bin/bash agentuser && \
+RUN groupadd -g ${GROUP_ID} -o goose && \
+    useradd -l -u ${USER_ID} -g goose -o -m -s /bin/bash goose && \
     mkdir -p /workspace && \
-    chown -R agentuser:agentgroup /workspace
+    chown -R goose:goose /workspace
 
 # Switch to the non-root user for all subsequent commands and execution
-USER agentuser
-WORKDIR /home/agentuser
+USER goose
+WORKDIR /home/goose
 
 # Download and install Goose CLI explicitly pinning the stable script
 RUN curl -fsSL https://github.com/aaif-goose/goose/releases/download/stable/download_cli.sh -o download_cli.sh && \
     CONFIGURE=false bash download_cli.sh
 
 # Add goose binary to PATH
-ENV PATH="/home/agentuser/.local/bin:${PATH}"
+ENV PATH="/home/goose/.local/bin:${PATH}"
 
 WORKDIR /workspace
 
