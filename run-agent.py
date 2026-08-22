@@ -46,7 +46,7 @@ def main():
         sys.exit(1)
 
     project_dir = os.path.abspath(sys.argv[1])
-    config_path = os.path.join(project_dir, "agent-conf.yaml")
+    config_path = os.path.join(project_dir, "agent-config.yaml")
 
     if not os.path.exists(config_path):
         print(f"❌ Error: No agent-config.yaml found at {config_path}")
@@ -80,11 +80,11 @@ def main():
     docker_cmd = [
         "docker", "run", "-it", "--rm",
         "--user", USER_STRING,
-        "--add-host", "host.docker.internal:host-gateway",
         "--security-opt", "no-new-privileges=true",
         "-v", f"{project_dir}:/workspace",
         "-v", f"{container_config_dir}:/home/goose/.config/goose",
         "-e", f"OPENAI_BASE_URL={host}",
+        "-e", "GOOSE_CLI_SHOW_THINKING=1",
         IMAGE_NAME,
         "goose", "session"
     ]
