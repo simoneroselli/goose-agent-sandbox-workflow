@@ -10,10 +10,9 @@ Jagent uses [Colima](https://github.com/abiosoft/colima) instead of Docker Deskt
 
 At the moment, the project is designed and tested only with the Goose CLI; other agent CLIs are not currently supported.
 
+## The Project
 
-See [Current Scope](doc/current-scope.md) for the implementation boundary and open questions.
-
-This project explores how to make an AI coding agent, currently **Qwen 3.8**, behave within clear container boundaries. It is a small, experimental harness around the Goose CLI rather than a general-purpose container platform.
+This project explores how to make an AI coding agent, behave within clear container boundaries.
 
 The central question is how to balance two kinds of control:
 
