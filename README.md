@@ -6,7 +6,9 @@ An experimental workflow for constraining an AI coding agent within a securely c
 
 ## Disclaimer
 
-Jagent uses [Colima](https://github.com/abiosoft/colima) instead of Docker Desktop because its networking setup allows the LLM to connect to a separate host on the local network. This is a local-development choice for connectivity and workflow simplicity, not a claim that Colima provides stronger isolation than Docker Desktop. At the moment, the project is designed and tested only with the Goose CLI; other agent CLIs are not currently supported.
+Jagent uses [Colima](https://github.com/abiosoft/colima) instead of Docker Desktop because its networking setup allows the container to to connect to an LLM machine on a separate host on the local network.
+
+At the moment, the project is designed and tested only with the Goose CLI; other agent CLIs are not currently supported.
 
 
 See [Current Scope](doc/current-scope.md) for the implementation boundary and open questions.
