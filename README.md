@@ -31,7 +31,7 @@ The project is intentionally focused on the boundary between the agent and its e
 Each Goose project should contain an `agent-config.yaml` file at its project root. Start with the template:
 
 ```bash
-cp config/agent-config.yaml.template /path/to/your-project/agent-config.yaml
+cp templates/agent-config.yaml.template /path/to/your-project/agent-config.yaml
 ```
 
 Review the provider, model, endpoint, approval mode, and enabled extensions before launching an agent. Keep manual approval enabled while evaluating agent behavior.
