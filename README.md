@@ -4,22 +4,10 @@ An experimental workflow for constraining an AI coding agent within a securely c
 
 ![Big Picture](doc/src/big_pic.jpeg)
 
-## Colima
+## Disclaimer
 
-Jagent uses [Colima](https://github.com/abiosoft/colima) instead of Docker Desktop. This is a deliberate local-development choice: Colima simplifies networking when the LLM is running on a separate host on the LAN. This project does not claim that Colima provides stronger isolation than Docker Desktop; the choice is primarily about connectivity and workflow simplicity.
+Jagent uses [Colima](https://github.com/abiosoft/colima) instead of Docker Desktop because its networking setup allows the LLM to connect to a separate host on the local network. This is a local-development choice for connectivity and workflow simplicity, not a claim that Colima provides stronger isolation than Docker Desktop. At the moment, the project is designed and tested only with the Goose CLI; other agent CLIs are not currently supported.
 
-## Successful Goose Prompt
-
-![Jagent logo](doc/src/logo.png)
-
-Example of a successful prompt inside the configured project boundary:
-
-```text
-You: Inspect the project files and summarize the current implementation. Do not modify anything.
-
-Goose: I inspected the mounted project directory and found the launcher, container definition,
-	   and configuration template. No files were modified.
-```
 
 See [Current Scope](doc/current-scope.md) for the implementation boundary and open questions.
 
