@@ -11,6 +11,7 @@ IMAGE_NAME = "goose-sandbox:latest"
 HOST_UID = os.getuid()
 HOST_GID = os.getgid()
 USER_STRING = f"{HOST_UID}:{HOST_GID}"
+AGENT_CONFIG = "agent-config.yaml"
 
 
 def ensure_docker_image():
@@ -46,7 +47,7 @@ def main():
         sys.exit(1)
 
     project_dir = os.path.abspath(sys.argv[1])
-    config_path = os.path.join(project_dir, "agent-config.yaml")
+    config_path = os.path.join(project_dir, AGENT_CONFIG)
 
     if not os.path.exists(config_path):
         print(f"❌ Error: No agent-config.yaml found at {config_path}")
@@ -58,6 +59,12 @@ def main():
     if not isinstance(config, dict):
         print(f"❌ Error: Expected a YAML mapping in {config_path}")
         sys.exit(1)
+
+
+    # Retrieve custom provider for OPENAI_BASE_URL
+    active_provider = config.get("active_provider", "openai")
+    provider_config = config.get("providers", {}).get(active_provider, {})
+    host = provider_config.get("host", "http://127.0.0.1:1234/v1")
 
     print(f"🚀 Launching Goose with provider: {config.get('active_provider', 'Unknown')}")
 
@@ -73,13 +80,15 @@ def main():
     # Build the Docker command with unprivileged security flags
     docker_cmd = [
         "docker", "run", "-it", "--rm",
+        "--add-host", f"qwen-server:192.168.178.50",
         "--user", USER_STRING,
-        "--security-opt", "no-new-privileges=true",
+        "--add-host", "host.docker.internal:host-gateway",
+        # "--security-opt", "no-new-privileges=true",
         "-v", f"{project_dir}:/workspace",
-        "-v", f"{container_config_dir}:/home/agentuser/.config/goose",
+        "-v", f"{container_config_dir}:/home/goose/.config/goose",
+        "-e", f"OPENAI_BASE_URL={host}",
         IMAGE_NAME,
-        # "goose", "session"
-        "bash"
+        "goose", "session"
     ]
 
     subprocess.run(docker_cmd)
