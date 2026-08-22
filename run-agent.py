@@ -6,6 +6,11 @@ import subprocess
 
 IMAGE_NAME = "goose-sandbox:latest"
 
+# Fetch host IDs once at the module level
+HOST_UID = os.getuid()
+HOST_GID = os.getgid()
+USER_STRING = f"{HOST_UID}:{HOST_GID}"
+
 
 def ensure_docker_image():
     repo_dir = os.path.dirname(os.path.abspath(__file__))
@@ -19,7 +24,10 @@ def ensure_docker_image():
 
     print(f"📦 Docker image {IMAGE_NAME} not found. Building it...")
     subprocess.run(
-        ["docker", "buildx", "build", "-f", "Dockerfile", "-t", IMAGE_NAME, "."],
+        ["docker", "buildx", "build", "-f", "Dockerfile", 
+            "--build-arg", f"USER_ID={HOST_UID}",
+            "--build-arg", f"GROUP_ID={HOST_GID}",
+            "-t", IMAGE_NAME, "."],
         cwd=repo_dir,
         check=True,
     )
@@ -81,7 +89,7 @@ def main():
     # Build the Docker command with unprivileged security flags
     docker_cmd = [
         "docker", "run", "-it", "--rm",
-        "--user", "1001:1001",
+        "--user", USER_STRING,
         "--security-opt", "no-new-privileges=true",
         "-v", f"{project_dir}:/workspace",
         "-v", f"{container_config_dir}:/home/agentuser/.config/goose",
