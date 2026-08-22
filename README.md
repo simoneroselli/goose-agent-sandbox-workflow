@@ -1,5 +1,9 @@
 # Goose Agent Sandbox Workflow
 
+An experimental workflow for constraining an AI coding agent within a securely configured container.
+
+![Big Picture](doc/src/big_pic.jpeg)
+
 This project explores how to make an AI coding agent, currently Qwen 3.8, behave within clear container boundaries. It is a small, experimental harness around the Goose CLI rather than a general-purpose container platform.
 
 The central question is how to balance two kinds of control:
