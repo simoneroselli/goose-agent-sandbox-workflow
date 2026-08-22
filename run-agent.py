@@ -80,10 +80,9 @@ def main():
     # Build the Docker command with unprivileged security flags
     docker_cmd = [
         "docker", "run", "-it", "--rm",
-        "--add-host", f"qwen-server:192.168.178.50",
         "--user", USER_STRING,
         "--add-host", "host.docker.internal:host-gateway",
-        # "--security-opt", "no-new-privileges=true",
+        "--security-opt", "no-new-privileges=true",
         "-v", f"{project_dir}:/workspace",
         "-v", f"{container_config_dir}:/home/goose/.config/goose",
         "-e", f"OPENAI_BASE_URL={host}",
