@@ -1,7 +1,16 @@
 # Put this file inside the workload project dir.
-project_name: <your_project_name_here>
-provider: openai
-model: qwen3.8-27b
-host: <your_api_url_here>
-# Enforce safe approval mode so it can't execute changes blindly
-mode: approve
+---
+active_provider: openai
+providers:
+  openai:
+    enabled: true
+    name: openai
+    model: qwen3.8-27b
+    host: <your_api_url_here>
+    configured: true
+extensions:
+  developer:
+    type: builtin
+    name: developer
+    enabled: false
+    bundled: true
