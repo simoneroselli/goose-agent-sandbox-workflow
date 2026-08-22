@@ -11,7 +11,6 @@ IMAGE_NAME = "goose-sandbox:latest"
 HOST_UID = os.getuid()
 HOST_GID = os.getgid()
 USER_STRING = f"{HOST_UID}:{HOST_GID}"
-AGENT_CONFIG = "agent-config.yaml"
 
 
 def ensure_docker_image():
@@ -47,7 +46,7 @@ def main():
         sys.exit(1)
 
     project_dir = os.path.abspath(sys.argv[1])
-    config_path = os.path.join(project_dir, AGENT_CONFIG)
+    config_path = os.path.join(project_dir, "agent-conf.yaml")
 
     if not os.path.exists(config_path):
         print(f"❌ Error: No agent-config.yaml found at {config_path}")
