@@ -2,6 +2,7 @@
 import os
 import sys
 import subprocess
+import shutil
 
 
 IMAGE_NAME = "goose-sandbox:latest"
@@ -54,35 +55,18 @@ def main():
     with open(config_path, "r") as f:
         config = yaml.safe_load(f)
 
-    provider = config.get("provider", "openai")
-    model = config.get("model", "qwen3.8-27b")
-    host = config.get("host", "http://localhost:1234/v1")
-    mode = config.get("mode", "approve")
-    
-    # Read developer extension preference (default to False for safety)
-    dev_enabled = config.get("extensions", {}).get("developer", False)
+    if not isinstance(config, dict):
+        print(f"❌ Error: Expected a YAML mapping in {config_path}")
+        sys.exit(1)
 
-    print(f"🚀 Launching Goose for project: {config.get('project_name', 'Unknown')}")
-    print(f"🔒 Developer Extension Enabled: {dev_enabled}")
+    print(f"🚀 Launching Goose with provider: {config.get('active_provider', 'Unknown')}")
 
     # Generate a temporary config file inside a local temp dir to mount into the container
     container_config_dir = os.path.expanduser("~/.config/goose")
     os.makedirs(container_config_dir, exist_ok=True)
-    
-    goose_app_config = {
-        "extensions": {
-            "developer": {
-                "type": "builtin",
-                "name": "developer",
-                "enabled": dev_enabled,
-                "bundled": True
-            }
-        }
-    }
-    
+
     app_config_path = os.path.join(container_config_dir, "config.yaml")
-    with open(app_config_path, "w") as cf:
-        yaml.dump(goose_app_config, cf)
+    shutil.copyfile(config_path, app_config_path)
 
     ensure_docker_image()
 
@@ -93,14 +77,9 @@ def main():
         "--security-opt", "no-new-privileges=true",
         "-v", f"{project_dir}:/workspace",
         "-v", f"{container_config_dir}:/home/agentuser/.config/goose",
-        "-e", f"GOOSE_PROVIDER={provider}",
-        "-e", f"GOOSE_MODEL={model}",
-        "-e", f"GOOSE_PROVIDER__HOST={host}",
-        "-e", f"GOOSE_PROVIDER__API_KEY=not-needed",
-        "-e", f"GOOSE_MODE={mode}",
-        "-e", f"GOOSE_WORKING_DIR=/workspace",
         IMAGE_NAME,
-        "goose", "session"
+        # "goose", "session"
+        "bash"
     ]
 
     subprocess.run(docker_cmd)
