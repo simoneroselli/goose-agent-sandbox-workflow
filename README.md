@@ -27,7 +27,7 @@ Install Colima with Homebrew and start it with Docker runtime networking enabled
 
 ```bash
 brew install colima
-colima start --runtime docker --network --network-address
+colima start --runtime docker --network-address
 ```
 
  Put an `agent-config.yaml` file in a project workdir. Copy the template over and customize it:
@@ -41,5 +41,7 @@ Review the provider, model, endpoint, approval mode (approval), and enabled exte
 Launch the agent with the project workdir:
 
 ```bash
-python3 run-agent.py /path/to/your-project
+python3 -m venv venv
+source venv/bin/activate
+(venv)python3 run-agent.py /path/to/your-project
 ```
